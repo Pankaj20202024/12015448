@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Management Service</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Number Management Service</h1>
+  <button id="fetchNumbers">Fetch Numbers</button>
+  <div id="result"></div>
+
+  <script>
+    const fetchNumbersButton = document.getElementById('fetchNumbers');
+    const resultDiv = document.getElementById('result');
+
+    fetchNumbersButton.addEventListener('click', async () => {
+      resultDiv.innerHTML = '';
+
+      const urls = [
+        'http://20.244.56.144/numbers/primes',
+        'http://20.244.56.144/numbers/fibo',
+        // Add more URLs as needed
+      ];
+
+      try {
+        const response = await fetch(`/numbers?url=${urls.join('&url=')}`);
+        const data = await response.json();
+        const numbers = data.numbers;
+
+        const numbersList = document.createElement('ul');
+        numbers.forEach(number => {
+          const listItem = document.createElement('li');
+          listItem.textContent = number;
+          numbersList.appendChild(listItem);
+        });
+
+        resultDiv.appendChild(numbersList);
+      } catch (error) {
+        console.error('An error occurred:', error);
+        resultDiv.textContent = 'An error occurred while fetching and displaying numbers.';
+      }
+    });
+  </script>
+</body>
+</html>
